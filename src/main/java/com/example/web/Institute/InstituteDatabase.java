@@ -3,6 +3,7 @@ package com.example.web.Institute;
 import com.example.web.Database;
 import com.example.web.course.Course;
 import com.example.web.major.Major;
+import com.example.web.major.MajorDatabase;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -37,37 +38,14 @@ public class InstituteDatabase {
                 i.setMajorArrayList(new ArrayList<>());
                 instituteMap.put(instituteId,i);
             }
-            sql = "SELECT majorId,majorName,major.instituteId,instituteName FROM major inner join institute where major.instituteId=institute.instituteId";
+            sql = "SELECT majorId,instituteId FROM major";
             ResultSet majorRs = stmt.executeQuery(sql);
             while (majorRs.next()) {
                 long majorId = majorRs.getLong("majorId");
-                String majorName = majorRs.getString("majorName");
                 long instituteId = majorRs.getLong("instituteId");
-                String instituteName =majorRs.getString("instituteName");
-                Major m = new Major();
-                m.setInstituteId(instituteId);
-                m.setMajorId(majorId);
-                m.setMajorName(majorName);
-                m.setInstituteName(instituteName);
-                m.setCourseArrayList(new ArrayList<>());
-                majorMap.put(majorId,m);
-                instituteMap.get(instituteId).getMajorArrayList().add(m);
-            }
-            sql = "SELECT courseId,courseName,majorId FROM course ";
-            ResultSet courserRs = stmt.executeQuery(sql);
-            while (courserRs.next()) {
-                long courseId = courserRs.getLong("courseId");
-                String courseName = courserRs.getString("courseName");
-                long majorId = courserRs.getLong("majorId");
-                Course course=new Course();
-                course.setCourseId(courseId);
-                course.setMajorId(majorId);
-                course.setCourseName(courseName);
-                course.setMajorName(majorMap.get(majorId).getMajorName());
-                majorMap.get(majorId).getCourseArrayList().add(course);
+                instituteMap.get(instituteId).getMajorArrayList().add(MajorDatabase.getMajorMap().get(majorId));
             }
             majorRs.close();
-            courserRs.close();
             instituteRs.close();
             stmt.close();
             conn.close();

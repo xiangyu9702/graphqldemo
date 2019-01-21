@@ -58,9 +58,6 @@ public class CourseDatabase {
         return courseMap;
     }
 
-
-
-
     public static void deleteCourse(Long id) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -98,7 +95,7 @@ public class CourseDatabase {
             }
         }
     }
-    public static void saveStudent(Course course) {
+    public static void saveCourse(Course course) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
