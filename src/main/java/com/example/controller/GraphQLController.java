@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.web.InstituteService;
+import com.example.web.CollegeService;
 import graphql.ExecutionInput;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
@@ -22,12 +22,12 @@ public class GraphQLController {
 
     private final GraphQL graphQL;
 
-    public GraphQLController(InstituteService instituteService) {
+    public GraphQLController(CollegeService collegeService) {
         GraphQLSchema schema = new GraphQLSchemaGenerator()
                 .withResolverBuilders(
                         //Resolve by annotations
                         new AnnotatedResolverBuilder())
-                .withOperationsFromSingleton(instituteService)
+                .withOperationsFromSingleton(collegeService)
                 .withValueMapperFactory(new JacksonValueMapperFactory())
                 .generate();
         graphQL = GraphQL.newGraphQL(schema).build();

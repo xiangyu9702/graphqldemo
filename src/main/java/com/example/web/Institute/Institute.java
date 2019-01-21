@@ -1,5 +1,6 @@
-package com.example.web;
+package com.example.web.Institute;
 
+import com.example.web.major.Major;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import lombok.*;
 
@@ -14,21 +15,21 @@ import java.util.ArrayList;
 @ToString @EqualsAndHashCode
 public class Institute {
     @Id @GeneratedValue
-    @GraphQLQuery(name = "instituteId", description = "A institute's instituteId")
+    @GraphQLQuery(name = "instituteId", description = "A Institute's instituteId")
     private Long instituteId;
-    @GraphQLQuery(name = "instituteName", description = "A institute's instituteName")
+    @GraphQLQuery(name = "instituteName", description = "A Institute's instituteName")
     private String instituteName;
-    @GraphQLQuery( name = "numberOfMajor", description = "A institute's number of major")
+    @GraphQLQuery( name = "numberOfMajor", description = "A Institute's number of major")
     private Integer numberOfMajor;
-    @GraphQLQuery( name = "majors", description = "A list of major")
-    private ArrayList<Major> majors;
+    @GraphQLQuery( name = "majorArrayList", description = "A list of major")
+    private ArrayList<Major> majorArrayList;
 
-    public ArrayList<Major> getMajors() {
-        return majors;
+    public ArrayList<Major> getMajorArrayList() {
+        return majorArrayList;
     }
 
-    public void setMajors(ArrayList<Major> majors) {
-        this.majors = majors;
+    public void setMajorArrayList(ArrayList<Major> majorArrayList) {
+        this.majorArrayList = majorArrayList;
     }
 
     public Long getInstituteId() {

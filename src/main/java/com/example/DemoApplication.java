@@ -1,8 +1,8 @@
 package com.example;
 
-import com.example.web.Institute;
-import com.example.web.instituteDatabase;
-import com.example.web.InstituteService;
+import com.example.web.Institute.Institute;
+import com.example.web.Institute.InstituteDatabase;
+import com.example.web.CollegeService;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,14 +18,5 @@ public class DemoApplication {
         SpringApplication.run(DemoApplication.class, args);
 	}
 
-    @Bean
-	ApplicationRunner init(InstituteService instituteService) {
-	    ArrayList<Institute> institutes =instituteDatabase.getInstitute();
-		return args -> {for (Institute nnn: institutes){
-			Stream.of(nnn).forEach(u -> {
-				instituteService.importUser(u.getInstituteId(),u);
-			});
-		};
-	};}
 }
 
