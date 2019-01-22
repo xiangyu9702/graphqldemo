@@ -21,7 +21,7 @@ public class Student {
     @GraphQLQuery(name = "studentName", description = "A student's studentName")
     private String studentName;
     @GraphQLQuery( name = "majorId", description = "A student's major")
-    private Integer majorId;
+    private Long majorId;
     @GraphQLQuery( name = "studentSex", description = "A student's sex")
     private String studentSex;
     @GraphQLQuery(name = "majorName", description = "A major's majorName")
@@ -43,11 +43,11 @@ public class Student {
         this.studentName = studentName;
     }
 
-    public Integer getMajorId() {
+    public Long getMajorId() {
         return majorId;
     }
 
-    public void setMajorId(Integer majorId) {
+    public void setMajorId(long majorId) {
         this.majorId = majorId;
     }
 

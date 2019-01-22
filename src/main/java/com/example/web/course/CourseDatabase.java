@@ -58,7 +58,7 @@ public class CourseDatabase {
         return courseMap;
     }
 
-    public static void deleteCourse(Long id) {
+    public static String deleteCourse(Long id) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -72,8 +72,6 @@ public class CourseDatabase {
             stmt = conn.prepareStatement(sql);
             stmt.setLong(1, id);
             stmt.executeUpdate();
-            ResultSet rs = stmt.executeQuery(sql);
-            rs.close();
             stmt.close();
             conn.close();
         } catch (SQLException se) {
@@ -94,8 +92,9 @@ public class CourseDatabase {
                 se.printStackTrace();
             }
         }
+        return "删除成功";
     }
-    public static void saveCourse(Course course) {
+    public static String saveCourse(Course course) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -110,9 +109,12 @@ public class CourseDatabase {
             stmt.setLong(1, course.getCourseId());
             stmt.setString(2, course.getCourseName());
             stmt.setLong(3, course.getMajorId());
-            stmt.executeUpdate();
-            ResultSet rs = stmt.executeQuery(sql);
-            rs.close();
+            try {
+                stmt.executeUpdate();
+            }
+            catch (SQLIntegrityConstraintViolationException e){
+                return "保存失败";
+            }
             stmt.close();
             conn.close();
         } catch (SQLException se) {
@@ -133,6 +135,7 @@ public class CourseDatabase {
                 se.printStackTrace();
             }
         }
+        return "保存成功";
     }
 
 }

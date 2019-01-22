@@ -70,7 +70,7 @@ public class InstituteDatabase {
         return instituteMap;
     }
 
-    public static void saveInstitute(Institute Institute) {
+    public static String saveInstitute(Institute Institute) {
         Map<Long, Institute> userMap=new HashMap<>();
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -86,9 +86,12 @@ public class InstituteDatabase {
             stmt.setLong(1, Institute.getInstituteId());
             stmt.setString(2, Institute.getInstituteName());
             stmt.setInt(3, Institute.getNumberOfMajor());
-            stmt.executeUpdate();
-            ResultSet rs = stmt.executeQuery(sql);
-            rs.close();
+            try {
+                stmt.executeUpdate();
+            }
+            catch (SQLIntegrityConstraintViolationException e){
+                return "保存失败";
+            }
             stmt.close();
             conn.close();
         } catch (SQLException se) {
@@ -109,8 +112,9 @@ public class InstituteDatabase {
                 se.printStackTrace();
             }
         }
+        return "保持成功";
     }
-    public static void deleteInstitute(Long id) {
+    public static String deleteInstitute(Long id) {
         Map<Long,Institute> userMap=new HashMap<>();
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -125,8 +129,6 @@ public class InstituteDatabase {
             stmt = conn.prepareStatement(sql);
             stmt.setLong(1,id);
             stmt.executeUpdate();
-            ResultSet rs = stmt.executeQuery(sql);
-            rs.close();
             stmt.close();
             conn.close();
         } catch (SQLException se) {
@@ -147,5 +149,6 @@ public class InstituteDatabase {
                 se.printStackTrace();
             }
         }
+        return "删除失败";
     }
 }

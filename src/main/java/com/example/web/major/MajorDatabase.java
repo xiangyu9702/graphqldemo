@@ -68,7 +68,7 @@ public class MajorDatabase {
         }
         return majorMap;
     }
-    public static void deleteMajor(Long id) {
+    public static String deleteMajor(Long id) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -82,8 +82,6 @@ public class MajorDatabase {
             stmt = conn.prepareStatement(sql);
             stmt.setLong(1, id);
             stmt.executeUpdate();
-            ResultSet rs = stmt.executeQuery(sql);
-            rs.close();
             stmt.close();
             conn.close();
         } catch (SQLException se) {
@@ -104,8 +102,9 @@ public class MajorDatabase {
                 se.printStackTrace();
             }
         }
+        return "删除成功";
     }
-    public static void saveMajor(Major major) {
+    public static String saveMajor(Major major) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -115,14 +114,17 @@ public class MajorDatabase {
             conn = DriverManager.getConnection(Database.DB_URL, Database.USER, Database.PASS);
             // 执行查询
             String sql;
-            sql = "insert into student values (?,?,?)";
+            sql = "insert into major values (?,?,?)";
             stmt = conn.prepareStatement(sql);
             stmt.setLong(1, major.getMajorId());
             stmt.setString(2, major.getMajorName());
             stmt.setLong(3, major.getInstituteId());
-            stmt.executeUpdate();
-            ResultSet rs = stmt.executeQuery(sql);
-            rs.close();
+            try {
+                stmt.executeUpdate();
+            }
+            catch (SQLIntegrityConstraintViolationException e){
+                return "保存失败";
+            }
             stmt.close();
             conn.close();
         } catch (SQLException se) {
@@ -143,6 +145,7 @@ public class MajorDatabase {
                 se.printStackTrace();
             }
         }
+        return "保存成功";
     }
 
 }

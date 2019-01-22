@@ -16,6 +16,8 @@ import io.leangen.graphql.annotations.GraphQLMutation;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.*;
 
 @Service
@@ -49,17 +51,21 @@ Queries for institutes
     }
 
     @GraphQLMutation(name = "saveInstitute")
-    public Institute saveInstitute(@GraphQLArgument(name = "Institute") Institute Institute) {
-        InstituteDatabase.saveInstitute(Institute);
-        instituteMap.put(Institute.getInstituteId(), Institute);
-        return Institute;
+    public String saveInstitute(@GraphQLArgument(name = "institutedId") Long institutedId,
+                                @GraphQLArgument(name = "instituteName") String instituteName,
+                                @GraphQLArgument(name = "numberOfMajor") int numberOfMajor) {
+        Institute institute = new Institute();
+        institute.setInstituteId(institutedId);
+        institute.setInstituteName(instituteName);
+        institute.setNumberOfMajor(numberOfMajor);
+        instituteMap.put(institutedId, institute);
+        return InstituteDatabase.saveInstitute(institute);
     }
 
     @GraphQLMutation(name = "deleteInstitute")
     public String deleteInstitute(@GraphQLArgument(name = "instituteId") Long id) {
-        InstituteDatabase.deleteInstitute(id);
         instituteMap.remove(id);
-        return "删除成功";
+        return InstituteDatabase.deleteInstitute(id);
     }
 
 
@@ -76,16 +82,26 @@ Queries for majors.
     public Major getMajorById(@GraphQLArgument(name = "majorId") Long id) {
         return majorMap.get(id);
     }
+
     @GraphQLMutation(name = "saveMajor")
-    public String saveMajor(@GraphQLArgument(name = "Major") Major major) {
-        MajorDatabase.saveMajor(major);
-        majorMap.put(major.getMajorId(),major);
-        return "保存成功";
+    public String saveMajor(@GraphQLArgument(name = "majorId") Long majorId,
+                            @GraphQLArgument(name = "majorName") String majorName,
+                            @GraphQLArgument(name = "institutedId") Long institutedId
+    ) {
+        Major major = new Major();
+        major.setMajorId(majorId);
+        major.setMajorName(majorName);
+        major.setInstituteId(institutedId);
+        major.setInstituteName(instituteMap.get(institutedId).getInstituteName());
+        majorMap.put(major.getMajorId(), major);
+        return MajorDatabase.saveMajor(major);
     }
-    @GraphQLMutation(name ="deleteMajor")
-    public void deleteMajor(@GraphQLArgument(name ="majorId") Long id){
-        MajorDatabase.deleteMajor(id);
-        majorMap.remove(id);}
+
+    @GraphQLMutation(name = "deleteMajor")
+    public String deleteMajor(@GraphQLArgument(name = "majorId") Long id) {
+        majorMap.remove(id);
+        return MajorDatabase.deleteMajor(id);
+    }
 
     /*
     Queries for students.
@@ -101,16 +117,24 @@ Queries for majors.
     }
 
     @GraphQLMutation(name = "saveStudent")
-    public String saveStudent(@GraphQLArgument(name = "Student") Student student) {
-        StudentDatabase.saveStudent(student);
-        studentMap.put(student.getStudentId(), student);
-        return "保存成功";
+    public String saveStudent(@GraphQLArgument(name = "studentId") Long studentID,
+                              @GraphQLArgument(name = "studentName") String studentName,
+                              @GraphQLArgument(name = "studentSex") String studentSex,
+                              @GraphQLArgument(name = "majorId") Long majorId) {
+        Student s = new Student();
+        s.setStudentName(studentName);
+        s.setMajorId(majorId);
+        s.setStudentId(studentID);
+        s.setStudentSex(studentSex);
+        s.setMajorName(majorMap.get(majorId).getMajorName());
+        studentMap.put(s.getStudentId(), s);
+        return StudentDatabase.saveStudent(s);
     }
 
     @GraphQLMutation(name = "deleteStudent")
-    public void deleteStudent(@GraphQLArgument(name = "studentId") Long id) {
-        StudentDatabase.deleteStudent(id);
+    public String deleteStudent(@GraphQLArgument(name = "studentId") Long id) {
         studentMap.remove(id);
+        return StudentDatabase.deleteStudent(id);
     }
 
 
@@ -128,16 +152,22 @@ Queries for majors.
     }
 
     @GraphQLMutation(name = "saveCourse")
-    public String saveCourse(@GraphQLArgument(name = "Course") Course course) {
-        CourseDatabase.saveCourse(course);
-        courseMap.put(course.getCourseId(), course);
-        return "保存成功";
+    public String saveCourse(@GraphQLArgument(name = "courseId") Long courseID,
+                             @GraphQLArgument(name = "studentName") String courseName,
+                             @GraphQLArgument(name = "majorId") Long majorId) {
+        Course c = new Course();
+        c.setCourseId(courseID);
+        c.setCourseName(courseName);
+        c.setMajorId(majorId);
+        c.setMajorName(majorMap.get(majorId).getMajorName());
+        courseMap.put(c.getCourseId(), c);
+        return CourseDatabase.saveCourse(c);
     }
 
     @GraphQLMutation(name = "deleteCourse")
-    public void deleteCourse(@GraphQLArgument(name = "courseId") Long id) {
-        CourseDatabase.deleteCourse(id);
+    public String deleteCourse(@GraphQLArgument(name = "courseId") Long id) {
         courseMap.remove(id);
+        return CourseDatabase.deleteCourse(id);
     }
 
 
@@ -155,16 +185,24 @@ Queries for majors.
     }
 
     @GraphQLMutation(name = "saveTeacher")
-    public String saveTeacher(@GraphQLArgument(name = "Teacher") Teacher teacher) {
-        TeacherDatabase.saveTeacher(teacher);
+    public String saveTeacher(@GraphQLArgument(name = "teacherId") Long teacherId,
+                              @GraphQLArgument(name = "teacherName") String teacherName,
+                              @GraphQLArgument(name = "teacherSex") String teacherSex,
+                              @GraphQLArgument(name = "instituteId") Long instituteId) {
+        Teacher teacher = new Teacher();
+        teacher.setTeacherId(teacherId);
+        teacher.setTeacherName(teacherName);
+        teacher.setTeacherSex(teacherSex);
+        teacher.setInstituteId(instituteId);
+        teacher.setInstituteName(instituteMap.get(instituteId).getInstituteName());
         teacherMap.put(teacher.getTeacherId(), teacher);
-        return "保存成功";
+        return TeacherDatabase.saveTeacher(teacher);
     }
 
     @GraphQLMutation(name = "deleteTeacher")
-    public void deleteTeacher(@GraphQLArgument(name = "teacherId") Long id) {
-        TeacherDatabase.deleteTeacher(id);
+    public String deleteTeacher(@GraphQLArgument(name = "teacherId") Long id) {
         teacherMap.remove(id);
+        return TeacherDatabase.deleteTeacher(id);
     }
 
 

@@ -60,7 +60,7 @@ public class TeacherDatabase {
         return teacherMap;
     }
 
-    public static void deleteTeacher(Long id) {
+    public static String deleteTeacher(Long id) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -74,8 +74,6 @@ public class TeacherDatabase {
             stmt = conn.prepareStatement(sql);
             stmt.setLong(1,id);
             stmt.executeUpdate();
-            ResultSet rs = stmt.executeQuery(sql);
-            rs.close();
             stmt.close();
             conn.close();
         } catch (SQLException se) {
@@ -96,8 +94,9 @@ public class TeacherDatabase {
                 se.printStackTrace();
             }
         }
+        return "删除成功";
     }
-    public static void saveTeacher(Teacher teacher) {
+    public static String saveTeacher(Teacher teacher) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -113,9 +112,12 @@ public class TeacherDatabase {
             stmt.setString(2, teacher.getTeacherName());
             stmt.setString(3, teacher.getTeacherSex());
             stmt.setLong(4, teacher.getInstituteId());
-            stmt.executeUpdate();
-            ResultSet rs = stmt.executeQuery(sql);
-            rs.close();
+            try {
+                stmt.executeUpdate();
+            }
+            catch (SQLIntegrityConstraintViolationException e){
+                return "保存失败";
+            }
             stmt.close();
             conn.close();
         } catch (SQLException se) {
@@ -136,5 +138,6 @@ public class TeacherDatabase {
                 se.printStackTrace();
             }
         }
+        return "保存成功";
     }
 }

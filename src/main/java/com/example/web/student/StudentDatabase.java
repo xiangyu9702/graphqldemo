@@ -64,7 +64,7 @@ public class StudentDatabase {
 
 
 
-    public static void deleteStudent(Long id) {
+    public static String deleteStudent(Long id) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -78,8 +78,6 @@ public class StudentDatabase {
             stmt = conn.prepareStatement(sql);
             stmt.setLong(1, id);
             stmt.executeUpdate();
-            ResultSet rs = stmt.executeQuery(sql);
-            rs.close();
             stmt.close();
             conn.close();
         } catch (SQLException se) {
@@ -100,9 +98,10 @@ public class StudentDatabase {
                 se.printStackTrace();
             }
         }
+        return "删除成功";
     }
 
-    public static void saveStudent(Student student) {
+    public static String saveStudent(Student student) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -118,9 +117,12 @@ public class StudentDatabase {
             stmt.setString(2, student.getStudentName());
             stmt.setString(3, student.getStudentSex());
             stmt.setLong(4, student.getMajorId());
-            stmt.executeUpdate();
-            ResultSet rs = stmt.executeQuery(sql);
-            rs.close();
+            try {
+                stmt.executeUpdate();
+            }
+            catch (SQLIntegrityConstraintViolationException e){
+                return "保存失败";
+            }
             stmt.close();
             conn.close();
         } catch (SQLException se) {
@@ -141,5 +143,6 @@ public class StudentDatabase {
                 se.printStackTrace();
             }
         }
+        return "保存成功";
     }
 }
