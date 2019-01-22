@@ -154,11 +154,14 @@ Queries for majors.
     @GraphQLMutation(name = "saveCourse")
     public String saveCourse(@GraphQLArgument(name = "courseId") Long courseID,
                              @GraphQLArgument(name = "studentName") String courseName,
-                             @GraphQLArgument(name = "majorId") Long majorId) {
+                             @GraphQLArgument(name = "majorId") Long majorId,
+    @GraphQLArgument(name="teacherId") Long teacherId) {
         Course c = new Course();
         c.setCourseId(courseID);
         c.setCourseName(courseName);
         c.setMajorId(majorId);
+        c.setTeacherId(teacherId);
+        c.setTeacherName(teacherMap.get(teacherId).getTeacherName());
         c.setMajorName(majorMap.get(majorId).getMajorName());
         courseMap.put(c.getCourseId(), c);
         return CourseDatabase.saveCourse(c);
@@ -209,7 +212,10 @@ Queries for majors.
 /*
 Queries for pubic
  */
-
+@GraphQLQuery(name = "courseDetails")
+public ArrayList<String > getdetails() {
+    return publicMethod.courseDetails();
+}
 
 }
 

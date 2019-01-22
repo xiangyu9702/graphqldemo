@@ -20,18 +20,23 @@ public class CourseDatabase {
             // 执行查询
             stmt = conn.createStatement();
             String sql;
-            sql = "SELECT courseId,courseName,course.majorId,majorName from course inner join major where major.majorId=course.majorId";
+            sql = "SELECT courseId,courseName,course.majorId,majorName,course.teacherId,teacher.teacherName from course inner join major,teacher" +
+                    " where major.majorId=course.majorId and course.teacherId=teacher.teacherId";
             ResultSet courseRs = stmt.executeQuery(sql);
             while (courseRs.next()) {
                 long coursetId = courseRs.getLong("courseId");
                 String courseName = courseRs.getString("courseName");
                 Long majorId = courseRs.getLong("majorId");
                 String majorName = courseRs.getString("majorName");
+                Long teacherId=courseRs.getLong("teacherId");
+                String teacherName=courseRs.getString("teacherName");
                 Course c = new Course();
                 c.setCourseId(coursetId);
                 c.setMajorName(majorName);
                 c.setCourseName(courseName);
                 c.setMajorId(majorId);
+                c.setTeacherName(teacherName);
+                c.setTeacherId(teacherId);
                 courseMap.put(coursetId,c);
             }
             courseRs.close();
@@ -104,11 +109,12 @@ public class CourseDatabase {
             conn = DriverManager.getConnection(Database.DB_URL, Database.USER, Database.PASS);
             // 执行查询
             String sql;
-            sql = "insert into student values (?,?,?)";
+            sql = "insert into course values (?,?,?,?)";
             stmt = conn.prepareStatement(sql);
             stmt.setLong(1, course.getCourseId());
             stmt.setString(2, course.getCourseName());
             stmt.setLong(3, course.getMajorId());
+            stmt.setLong(4,course.getTeacherId());
             try {
                 stmt.executeUpdate();
             }

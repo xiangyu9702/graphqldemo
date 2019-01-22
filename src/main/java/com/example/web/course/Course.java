@@ -22,6 +22,26 @@ public class Course {
     private Long majorId;
     @GraphQLQuery(name = "majorName", description = "A major's majorName")
     private String majorName;
+    @GraphQLQuery(name = "teacherId", description = "A teacher's Id")
+    private Long teacherId;
+    @GraphQLQuery(name = "teacherName", description = "A teacher's Name")
+    private String teacherName;
+
+    public Long getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(Long teacherId) {
+        this.teacherId = teacherId;
+    }
+
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
+    }
 
     public Long getMajorId() {
         return majorId;

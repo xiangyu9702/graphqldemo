@@ -18,28 +18,30 @@ public class publicMethod {
             // 执行查询
             stmt = conn.createStatement();
             String sql;
-            sql = "SELECT course.courseId,courseName,course.majorId,majorName,teacher.teacherId,teacherName,course.studentId,studentName " +
-                    "from course inner join student,major,teacher where course.studentId=student.studentId " +
-                    "and course.majorId=major.majorId and teacher.courseId=course.courseId";
+            sql = "SELECT course.courseId,courseName,course.majorId,majorName,teacher.teacherId,teacherName," +
+                    "studentId,studentName from course inner join student,major,teacher " +
+                    "where course.majorId=student.majorId and course.majorId=major.majorId " +
+                    "and teacher.teacherId=course.teacherId";
             ResultSet courseRs = stmt.executeQuery(sql);
             while (courseRs.next()) {
                 long coursetId = courseRs.getLong("courseId");
                 String courseName = courseRs.getString("courseName");
-                Integer teacherId=courseRs.getInt("teacherId");
-                String teacherName=courseRs.getString("teacherName");
+                Integer teacherId = courseRs.getInt("teacherId");
+                String teacherName = courseRs.getString("teacherName");
                 Integer majorId = courseRs.getInt("majorId");
                 String majorName = courseRs.getString("majorName");
                 Integer studentId = courseRs.getInt("studentId");
-                String studentName=courseRs.getString("studentName");
-                String s="课程编号:"+coursetId+", "
-                        +"课程名称："+courseName+",      "
-                        +"教师编号："+teacherId+", "
-                        +"教师名称："+teacherName+",      "
-                        +"专业编号："+majorId+", "
-                        +"专业名称："+majorName+",      "
-                        +"学生编号："+studentId+", "
-                        +"学生名称："+studentName;
-
+                String studentName = courseRs.getString("studentName");
+                String s = "课程编号:" + coursetId + "," + "    "
+                        + "课程名称：" + courseName + "," +"    "
+                        + "教师编号：" + teacherId + "," + "    "
+                        + "教师名称：" + teacherName + "," + "    "
+                        + "专业编号：" + majorId + "," + "    "
+                        + "专业名称：" + majorName + "," + "    "
+                        + "学生编号：" + studentId + "," + "    "
+                        + "学生名称：" + studentName;
+                details.add(s);
+                s="";
                 details.add(s);
             }
             courseRs.close();
