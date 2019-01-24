@@ -65,12 +65,16 @@ Queries for institutes
 
     @GraphQLMutation(name = "updateInstitute")//更新学院信息
     public String updateInstitute(@GraphQLArgument(name = "instituteId") Long instituteID,
-                               @GraphQLArgument(name = "instituteName") String instituteName,
-                               @GraphQLArgument(name = "numberOfMajor") int numberOfMajor
-                               ) {
+                                  @GraphQLArgument(name = "instituteName") String instituteName,
+                                  @GraphQLArgument(name = "numberOfMajor") int numberOfMajor
+    ) {
+        try {
         instituteMap.get(instituteID).setInstituteName(instituteName);
         instituteMap.get(instituteID).setNumberOfMajor(numberOfMajor);
-        return InstituteDatabase.updateInstitute(instituteID,instituteMap.get(instituteID));
+        } catch (Exception E) {
+            return "更新信息失败，请检查是否存在该id";
+        }
+        return InstituteDatabase.updateInstitute(instituteID, instituteMap.get(instituteID));
     }
 
     @GraphQLMutation(name = "deleteInstitute")//删除学院信息
@@ -110,11 +114,15 @@ Queries for majors.
 
     @GraphQLMutation(name = "updateMajor")//更新课程信息
     public String updateMajor(@GraphQLArgument(name = "majorId") Long majorID,
-                               @GraphQLArgument(name = "majorName") String majorName,
-                               @GraphQLArgument(name = "instituteId") Long instituteId) {
+                              @GraphQLArgument(name = "majorName") String majorName,
+                              @GraphQLArgument(name = "instituteId") Long instituteId) {
+        try {
         majorMap.get(majorID).setMajorName(majorName);
         majorMap.get(majorID).setInstituteId(instituteId);
         majorMap.get(majorID).setInstituteName(instituteMap.get(instituteId).getInstituteName());
+        } catch (Exception E) {
+            return "更新信息失败，请检查是否存在该id";
+        }
         return MajorDatabase.updateMajor(majorID, majorMap.get(majorID));
     }
 
@@ -154,14 +162,18 @@ Queries for majors.
 
     @GraphQLMutation(name = "updateStudent")//保存学生信息
     public String updateStudent(@GraphQLArgument(name = "studentId") Long studentID,
-                              @GraphQLArgument(name = "studentName") String studentName,
-                              @GraphQLArgument(name = "studentSex") String studentSex,
-                              @GraphQLArgument(name = "majorId") Long majorId) {
-        studentMap.get(studentID).setStudentName(studentName);
-        studentMap.get(studentID).setMajorId(majorId);
-        studentMap.get(studentID).setStudentId(studentID);
-        studentMap.get(studentID).setStudentSex(studentSex);
-        studentMap.get(studentID).setMajorName(majorMap.get(majorId).getMajorName());
+                                @GraphQLArgument(name = "studentName") String studentName,
+                                @GraphQLArgument(name = "studentSex") String studentSex,
+                                @GraphQLArgument(name = "majorId") Long majorId) {
+        try {
+            studentMap.get(studentID).setStudentName(studentName);
+            studentMap.get(studentID).setMajorId(majorId);
+            studentMap.get(studentID).setStudentId(studentID);
+            studentMap.get(studentID).setStudentSex(studentSex);
+            studentMap.get(studentID).setMajorName(majorMap.get(majorId).getMajorName());
+        } catch (Exception E) {
+            return "更新信息失败，请检查是否存在该id";
+        }
         return StudentDatabase.updateStudent(studentID, studentMap.get(studentID));
     }
 
@@ -189,7 +201,7 @@ Queries for majors.
     public String saveCourse(@GraphQLArgument(name = "courseId") Long courseID,
                              @GraphQLArgument(name = "courseName") String courseName,
                              @GraphQLArgument(name = "majorId") Long majorId,
-                             @GraphQLArgument(name="teacherId") Long teacherId) {
+                             @GraphQLArgument(name = "teacherId") Long teacherId) {
         Course c = new Course();
         c.setCourseId(courseID);
         c.setCourseName(courseName);
@@ -203,14 +215,18 @@ Queries for majors.
 
     @GraphQLMutation(name = "updateCourse")//更新课程信息
     public String updateCourse(@GraphQLArgument(name = "courseId") Long courseID,
-                             @GraphQLArgument(name = "courseName") String courseName,
-                             @GraphQLArgument(name = "majorId") Long majorId,
-                             @GraphQLArgument(name="teacherId") Long teacherId) {
+                               @GraphQLArgument(name = "courseName") String courseName,
+                               @GraphQLArgument(name = "majorId") Long majorId,
+                               @GraphQLArgument(name = "teacherId") Long teacherId) {
+        try {
         courseMap.get(courseID).setTeacherName(teacherMap.get(teacherId).getTeacherName());
         courseMap.get(courseID).setCourseName(courseName);
         courseMap.get(courseID).setMajorId(majorId);
         courseMap.get(courseID).setTeacherId(teacherId);
         courseMap.get(courseID).setMajorName(majorMap.get(majorId).getMajorName());
+        } catch (Exception E) {
+            return "更新信息失败，请检查是否存在该id";
+        }
         return CourseDatabase.updateCourse(courseID, courseMap.get(courseID));
     }
 
@@ -239,19 +255,23 @@ Queries for majors.
                               @GraphQLArgument(name = "teacherName") String teacherName,
                               @GraphQLArgument(name = "teacherSex") String teacherSex,
                               @GraphQLArgument(name = "instituteId") Long instituteId) {
+        try {
         teacherMap.get(teacherId).setTeacherId(teacherId);
         teacherMap.get(teacherId).setTeacherName(teacherName);
         teacherMap.get(teacherId).setTeacherSex(teacherSex);
         teacherMap.get(teacherId).setInstituteId(instituteId);
         teacherMap.get(teacherId).setInstituteName(instituteMap.get(instituteId).getInstituteName());
-        return TeacherDatabase.updateTeacher(teacherId,  teacherMap.get(teacherId));
+        } catch (Exception E) {
+            return "更新信息失败，请检查是否存在该id";
+        }
+        return TeacherDatabase.updateTeacher(teacherId, teacherMap.get(teacherId));
     }
 
     @GraphQLMutation(name = "saveTeacher")//保存教师信息
     public String updateTeacher(@GraphQLArgument(name = "teacherId") Long teacherId,
-                              @GraphQLArgument(name = "teacherName") String teacherName,
-                              @GraphQLArgument(name = "teacherSex") String teacherSex,
-                              @GraphQLArgument(name = "instituteId") Long instituteId) {
+                                @GraphQLArgument(name = "teacherName") String teacherName,
+                                @GraphQLArgument(name = "teacherSex") String teacherSex,
+                                @GraphQLArgument(name = "instituteId") Long instituteId) {
         Teacher teacher = new Teacher();
         teacher.setTeacherId(teacherId);
         teacher.setTeacherName(teacherName);
@@ -269,13 +289,13 @@ Queries for majors.
     }
 
 
-/*
-Queries for pubic
- */
-@GraphQLQuery(name = "courseDetails")
-public ArrayList<String > getDetails() {
-    return publicMethod.courseDetails();
-}
+    /*
+    Queries for pubic
+     */
+    @GraphQLQuery(name = "courseDetails")
+    public ArrayList<String> getDetails() {
+        return publicMethod.courseDetails();
+    }
 
 }
 

@@ -30,20 +30,20 @@ public class CourseDatabase {
                     " where major.majorId=course.majorId and course.teacherId=teacher.teacherId";
             ResultSet courseRs = stmt.executeQuery(sql);
             while (courseRs.next()) {
-                long coursetId = courseRs.getLong("courseId");
+                long courseId = courseRs.getLong("courseId");
                 String courseName = courseRs.getString("courseName");
                 Long majorId = courseRs.getLong("majorId");
                 String majorName = courseRs.getString("majorName");
                 Long teacherId=courseRs.getLong("teacherId");
                 String teacherName=courseRs.getString("teacherName");
                 Course c = new Course();
-                c.setCourseId(coursetId);
+                c.setCourseId(courseId);
                 c.setMajorName(majorName);
                 c.setCourseName(courseName);
                 c.setMajorId(majorId);
                 c.setTeacherName(teacherName);
                 c.setTeacherId(teacherId);
-                courseMap.put(coursetId,c);
+                courseMap.put(courseId,c);
             }
             courseRs.close();
             stmt.close();
@@ -91,6 +91,7 @@ public class CourseDatabase {
         } catch (Exception e) {
             // 处理 Class.forName 错误
             e.printStackTrace();
+            return "失败";
         } finally {
             // 关闭资源
             try {
@@ -135,6 +136,7 @@ public class CourseDatabase {
         } catch (Exception e) {
             // 处理 Class.forName 错误
             e.printStackTrace();
+            return "失败";
         } finally {
             // 关闭资源
             try {
@@ -161,7 +163,7 @@ public class CourseDatabase {
             // 执行
             System.out.println("执行更新功能");
             String sql;
-            sql = "update course set courseName=?,majorId=?,teacherId=? where courseId = ?";
+            sql = "update course set courseId=?,courseName=?,majorId=?,teacherId=? where courseId =?";
             stmt = conn.prepareStatement(sql);
             stmt.setLong(1,course.getCourseId());
             stmt.setString(2,course.getCourseName());
@@ -178,6 +180,7 @@ public class CourseDatabase {
         }catch(Exception e){
             // 处理 Class.forName 错误
             e.printStackTrace();
+            return "失败";
         }finally{
             // 关闭资源
             try{

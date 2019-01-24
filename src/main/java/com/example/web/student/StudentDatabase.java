@@ -89,6 +89,7 @@ public class StudentDatabase {
         } catch (Exception e) {
             // 处理 Class.forName 错误
             e.printStackTrace();
+            return "失败";
         } finally {
             // 关闭资源
             try {
@@ -134,6 +135,7 @@ public class StudentDatabase {
         } catch (Exception e) {
             // 处理 Class.forName 错误
             e.printStackTrace();
+            return "失败";
         } finally {
             // 关闭资源
             try {
@@ -159,7 +161,7 @@ public class StudentDatabase {
             // 执行
             System.out.println("执行更新功能");
             String sql;
-            sql = "update student set studentId,studentName,studentSex,majorId where studentId = ?";
+            sql = "update student set studentId=?,studentName=?,studentSex=?,majorId=? where studentId = ?";
             stmt = conn.prepareStatement(sql);
             stmt.setLong(1,student.getStudentId());
             stmt.setString(2,student.getStudentName());
@@ -176,6 +178,7 @@ public class StudentDatabase {
         }catch(Exception e){
             // 处理 Class.forName 错误
             e.printStackTrace();
+            return "更新详细信息失败";
         }finally{
             // 关闭资源
             try{

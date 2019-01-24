@@ -106,6 +106,7 @@ public class InstituteDatabase {
         } catch (Exception e) {
             // 处理 Class.forName 错误
             e.printStackTrace();
+            return "失败";
         } finally {
             // 关闭资源
             try {
@@ -143,6 +144,7 @@ public class InstituteDatabase {
         } catch (Exception e) {
             // 处理 Class.forName 错误
             e.printStackTrace();
+            return "失败";
         } finally {
             // 关闭资源
             try {
@@ -185,6 +187,7 @@ public class InstituteDatabase {
         }catch(Exception e){
             // 处理 Class.forName 错误
             e.printStackTrace();
+            return "失败";
         }finally{
             // 关闭资源
             try{
