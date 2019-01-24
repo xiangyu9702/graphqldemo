@@ -1,10 +1,11 @@
 package com.example.web.publicMethod;
 
 import com.example.web.Database;
-
 import java.sql.*;
 import java.util.ArrayList;
-
+/*
+得到有关课程的详细信息
+ */
 public class publicMethod {
     public static ArrayList<String> courseDetails() {
         ArrayList<String> details = new ArrayList<>();

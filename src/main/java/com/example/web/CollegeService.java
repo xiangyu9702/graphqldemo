@@ -16,10 +16,11 @@ import io.leangen.graphql.annotations.GraphQLMutation;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.*;
 
+/*
+Graphql的Query和Mutation
+ */
 @Service
 public class CollegeService {
 
@@ -40,17 +41,17 @@ public class CollegeService {
 Queries for institutes
  */
 
-    @GraphQLQuery(name = "institutes")
+    @GraphQLQuery(name = "institutes")//获取学院信息
     public Collection<Institute> getInstitutes() {
         return InstituteDatabase.getInstituteMap().values();
     }
 
-    @GraphQLQuery(name = "Institute")
+    @GraphQLQuery(name = "Institute")//根据Id获取学院信息
     public Institute getInstituteById(@GraphQLArgument(name = "instituteId") Long id) {
         return instituteMap.get(id);
     }
 
-    @GraphQLMutation(name = "saveInstitute")
+    @GraphQLMutation(name = "saveInstitute")//储存学院信息
     public String saveInstitute(@GraphQLArgument(name = "institutedId") Long institutedId,
                                 @GraphQLArgument(name = "instituteName") String instituteName,
                                 @GraphQLArgument(name = "numberOfMajor") int numberOfMajor) {
@@ -62,7 +63,17 @@ Queries for institutes
         return InstituteDatabase.saveInstitute(institute);
     }
 
-    @GraphQLMutation(name = "deleteInstitute")
+    @GraphQLMutation(name = "updateInstitute")//更新学院信息
+    public String updateInstitute(@GraphQLArgument(name = "instituteId") Long instituteID,
+                               @GraphQLArgument(name = "instituteName") String instituteName,
+                               @GraphQLArgument(name = "numberOfMajor") int numberOfMajor
+                               ) {
+        instituteMap.get(instituteID).setInstituteName(instituteName);
+        instituteMap.get(instituteID).setNumberOfMajor(numberOfMajor);
+        return InstituteDatabase.updateInstitute(instituteID,instituteMap.get(instituteID));
+    }
+
+    @GraphQLMutation(name = "deleteInstitute")//删除学院信息
     public String deleteInstitute(@GraphQLArgument(name = "instituteId") Long id) {
         instituteMap.remove(id);
         return InstituteDatabase.deleteInstitute(id);
@@ -73,17 +84,17 @@ Queries for institutes
 Queries for majors.
  */
 
-    @GraphQLQuery(name = "majors")
+    @GraphQLQuery(name = "majors")//获取专业信息
     public Collection<Major> getMajors() {
         return MajorDatabase.getMajorMap().values();
     }
 
-    @GraphQLQuery(name = "major")
+    @GraphQLQuery(name = "major")//根据Id获取专业信息
     public Major getMajorById(@GraphQLArgument(name = "majorId") Long id) {
         return majorMap.get(id);
     }
 
-    @GraphQLMutation(name = "saveMajor")
+    @GraphQLMutation(name = "saveMajor")//保存专业信息
     public String saveMajor(@GraphQLArgument(name = "majorId") Long majorId,
                             @GraphQLArgument(name = "majorName") String majorName,
                             @GraphQLArgument(name = "institutedId") Long institutedId
@@ -97,7 +108,17 @@ Queries for majors.
         return MajorDatabase.saveMajor(major);
     }
 
-    @GraphQLMutation(name = "deleteMajor")
+    @GraphQLMutation(name = "updateMajor")//更新课程信息
+    public String updateMajor(@GraphQLArgument(name = "majorId") Long majorID,
+                               @GraphQLArgument(name = "majorName") String majorName,
+                               @GraphQLArgument(name = "instituteId") Long instituteId) {
+        majorMap.get(majorID).setMajorName(majorName);
+        majorMap.get(majorID).setInstituteId(instituteId);
+        majorMap.get(majorID).setInstituteName(instituteMap.get(instituteId).getInstituteName());
+        return MajorDatabase.updateMajor(majorID, majorMap.get(majorID));
+    }
+
+    @GraphQLMutation(name = "deleteMajor")//删除专业信息
     public String deleteMajor(@GraphQLArgument(name = "majorId") Long id) {
         majorMap.remove(id);
         return MajorDatabase.deleteMajor(id);
@@ -106,17 +127,17 @@ Queries for majors.
     /*
     Queries for students.
      */
-    @GraphQLQuery(name = "students")
+    @GraphQLQuery(name = "students")//获取学生信息
     public Collection<Student> getStudents() {
         return StudentDatabase.getStudentMap().values();
     }
 
-    @GraphQLQuery(name = "student")
+    @GraphQLQuery(name = "student")//根据Id获取学生信息
     public Student getStudentById(@GraphQLArgument(name = "studentId") Long id) {
         return studentMap.get(id);
     }
 
-    @GraphQLMutation(name = "saveStudent")
+    @GraphQLMutation(name = "saveStudent")//保存学生信息
     public String saveStudent(@GraphQLArgument(name = "studentId") Long studentID,
                               @GraphQLArgument(name = "studentName") String studentName,
                               @GraphQLArgument(name = "studentSex") String studentSex,
@@ -131,7 +152,20 @@ Queries for majors.
         return StudentDatabase.saveStudent(s);
     }
 
-    @GraphQLMutation(name = "deleteStudent")
+    @GraphQLMutation(name = "updateStudent")//保存学生信息
+    public String updateStudent(@GraphQLArgument(name = "studentId") Long studentID,
+                              @GraphQLArgument(name = "studentName") String studentName,
+                              @GraphQLArgument(name = "studentSex") String studentSex,
+                              @GraphQLArgument(name = "majorId") Long majorId) {
+        studentMap.get(studentID).setStudentName(studentName);
+        studentMap.get(studentID).setMajorId(majorId);
+        studentMap.get(studentID).setStudentId(studentID);
+        studentMap.get(studentID).setStudentSex(studentSex);
+        studentMap.get(studentID).setMajorName(majorMap.get(majorId).getMajorName());
+        return StudentDatabase.updateStudent(studentID, studentMap.get(studentID));
+    }
+
+    @GraphQLMutation(name = "deleteStudent")//删除学生信息
     public String deleteStudent(@GraphQLArgument(name = "studentId") Long id) {
         studentMap.remove(id);
         return StudentDatabase.deleteStudent(id);
@@ -141,21 +175,21 @@ Queries for majors.
     /*
     Queries for courses.
      */
-    @GraphQLQuery(name = "courses")
+    @GraphQLQuery(name = "courses")//获取课程信息
     public Collection<Course> getCourses() {
         return CourseDatabase.getCourseMap().values();
     }
 
-    @GraphQLQuery(name = "course")
+    @GraphQLQuery(name = "course")//根据Id获取课程信息
     public Course getCourseById(@GraphQLArgument(name = "courseId") Long id) {
         return courseMap.get(id);
     }
 
-    @GraphQLMutation(name = "saveCourse")
+    @GraphQLMutation(name = "saveCourse")//保存课程信息
     public String saveCourse(@GraphQLArgument(name = "courseId") Long courseID,
-                             @GraphQLArgument(name = "studentName") String courseName,
+                             @GraphQLArgument(name = "courseName") String courseName,
                              @GraphQLArgument(name = "majorId") Long majorId,
-    @GraphQLArgument(name="teacherId") Long teacherId) {
+                             @GraphQLArgument(name="teacherId") Long teacherId) {
         Course c = new Course();
         c.setCourseId(courseID);
         c.setCourseName(courseName);
@@ -167,7 +201,20 @@ Queries for majors.
         return CourseDatabase.saveCourse(c);
     }
 
-    @GraphQLMutation(name = "deleteCourse")
+    @GraphQLMutation(name = "updateCourse")//更新课程信息
+    public String updateCourse(@GraphQLArgument(name = "courseId") Long courseID,
+                             @GraphQLArgument(name = "courseName") String courseName,
+                             @GraphQLArgument(name = "majorId") Long majorId,
+                             @GraphQLArgument(name="teacherId") Long teacherId) {
+        courseMap.get(courseID).setTeacherName(teacherMap.get(teacherId).getTeacherName());
+        courseMap.get(courseID).setCourseName(courseName);
+        courseMap.get(courseID).setMajorId(majorId);
+        courseMap.get(courseID).setTeacherId(teacherId);
+        courseMap.get(courseID).setMajorName(majorMap.get(majorId).getMajorName());
+        return CourseDatabase.updateCourse(courseID, courseMap.get(courseID));
+    }
+
+    @GraphQLMutation(name = "deleteCourse")//删除课程信息
     public String deleteCourse(@GraphQLArgument(name = "courseId") Long id) {
         courseMap.remove(id);
         return CourseDatabase.deleteCourse(id);
@@ -177,18 +224,31 @@ Queries for majors.
     /*
     Queries for teachers.
      */
-    @GraphQLQuery(name = "teachers")
+    @GraphQLQuery(name = "teachers")//获取教师信息
     public Collection<Teacher> getTeacher() {
         return teacherMap.values();
     }
 
-    @GraphQLQuery(name = "teacher")
+    @GraphQLQuery(name = "teacher")//根据Id获取教师信息
     public Teacher getTeacherById(@GraphQLArgument(name = "teacherId") Long id) {
         return teacherMap.get(id);
     }
 
-    @GraphQLMutation(name = "saveTeacher")
+    @GraphQLMutation(name = "updateTeacher")//更新教师信息
     public String saveTeacher(@GraphQLArgument(name = "teacherId") Long teacherId,
+                              @GraphQLArgument(name = "teacherName") String teacherName,
+                              @GraphQLArgument(name = "teacherSex") String teacherSex,
+                              @GraphQLArgument(name = "instituteId") Long instituteId) {
+        teacherMap.get(teacherId).setTeacherId(teacherId);
+        teacherMap.get(teacherId).setTeacherName(teacherName);
+        teacherMap.get(teacherId).setTeacherSex(teacherSex);
+        teacherMap.get(teacherId).setInstituteId(instituteId);
+        teacherMap.get(teacherId).setInstituteName(instituteMap.get(instituteId).getInstituteName());
+        return TeacherDatabase.updateTeacher(teacherId,  teacherMap.get(teacherId));
+    }
+
+    @GraphQLMutation(name = "saveTeacher")//保存教师信息
+    public String updateTeacher(@GraphQLArgument(name = "teacherId") Long teacherId,
                               @GraphQLArgument(name = "teacherName") String teacherName,
                               @GraphQLArgument(name = "teacherSex") String teacherSex,
                               @GraphQLArgument(name = "instituteId") Long instituteId) {
@@ -202,7 +262,7 @@ Queries for majors.
         return TeacherDatabase.saveTeacher(teacher);
     }
 
-    @GraphQLMutation(name = "deleteTeacher")
+    @GraphQLMutation(name = "deleteTeacher")//删除教师信息
     public String deleteTeacher(@GraphQLArgument(name = "teacherId") Long id) {
         teacherMap.remove(id);
         return TeacherDatabase.deleteTeacher(id);
@@ -213,7 +273,7 @@ Queries for majors.
 Queries for pubic
  */
 @GraphQLQuery(name = "courseDetails")
-public ArrayList<String > getdetails() {
+public ArrayList<String > getDetails() {
     return publicMethod.courseDetails();
 }
 

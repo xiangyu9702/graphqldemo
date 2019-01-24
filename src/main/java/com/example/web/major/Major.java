@@ -2,19 +2,14 @@ package com.example.web.major;
 
 import com.example.web.course.Course;
 import io.leangen.graphql.annotations.GraphQLQuery;
-import lombok.*;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.ArrayList;
-
+/*
+专业的实体类
+ */
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@ToString
-@EqualsAndHashCode
 public class Major {
 
     @Id

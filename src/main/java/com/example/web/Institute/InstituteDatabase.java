@@ -9,7 +9,13 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
+/*
+学院的数据库方法
+getInstituteMap：从数据库获取学院信息
+deleteInstitute：从数据库删除学院信息
+saveInstitute：保存新的学院信息
+updateInstitute:更新学院信息
+ */
 public class InstituteDatabase {
     public static Map<Long,Institute> getInstituteMap() {
         Map<Long,Institute> instituteMap=new HashMap<>();
@@ -150,5 +156,47 @@ public class InstituteDatabase {
             }
         }
         return "删除失败";
+    }
+
+    public static String updateInstitute( Long id, Institute institute) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try{
+            // 注册 JDBC 驱动
+            Class.forName(Database.JDBC_DRIVER);
+            // 打开链接
+            conn = DriverManager.getConnection(Database.DB_URL,Database.USER,Database.PASS);
+            // 执行
+            System.out.println("执行更新功能");
+            String sql;
+            sql = "update institute set instituteId=?,instituteName=?,numberOfMajor=? where instituteId = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setLong(1,institute.getInstituteId());
+            stmt.setString(2,institute.getInstituteName());
+            stmt.setLong(3,institute.getNumberOfMajor());
+            stmt.setLong(4,id);
+            stmt.executeUpdate();
+            // 完成后关闭
+            stmt.close();
+            conn.close();
+        }catch(SQLException se){
+            // 处理 JDBC 错误
+            se.printStackTrace();
+        }catch(Exception e){
+            // 处理 Class.forName 错误
+            e.printStackTrace();
+        }finally{
+            // 关闭资源
+            try{
+                if(stmt!=null) stmt.close();
+            }catch(SQLException se2){
+            }
+            try{
+                if(conn!=null) conn.close();
+            }catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+        return "更新详细信息成功";
     }
 }

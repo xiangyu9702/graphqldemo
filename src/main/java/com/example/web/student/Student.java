@@ -1,19 +1,15 @@
 package com.example.web.student;
 
 
-import com.example.web.course.Course;
 import io.leangen.graphql.annotations.GraphQLQuery;
-import lombok.*;
-
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Entity;
-import java.util.ArrayList;
 
+/*
+学生的实体类
+ */
 @Entity
-@Getter@Setter
-@NoArgsConstructor
-@ToString @EqualsAndHashCode
 public class Student {
     @Id @GeneratedValue
     @GraphQLQuery(name = "studentId", description = "A student's studentId")

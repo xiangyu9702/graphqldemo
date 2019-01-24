@@ -1,5 +1,7 @@
 package com.example.web;
-
+/*
+数据库信息
+ */
 public class Database {
     // JDBC 驱动名及数据库 URL
     public static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";

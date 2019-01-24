@@ -8,7 +8,13 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
+/*
+专业的数据库方法
+getMajorMap：从数据库获取专业信息
+deleteMajor：从数据库删除专业信息
+saveMajor：保存新的专业信息
+updateMajor:更新专业信息
+ */
 public class MajorDatabase {
     public static Map<Long, Major> getMajorMap() {
         Map<Long, Major> majorMap = new HashMap<>();
@@ -147,5 +153,48 @@ public class MajorDatabase {
         }
         return "保存成功";
     }
-
+    public static String updateMajor( Long id, Major major) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        for (Course c:major.getCourseArrayList()){
+            CourseDatabase.updateCourse(c.getCourseId(),c);
+        }
+        try{
+            // 注册 JDBC 驱动
+            Class.forName(Database.JDBC_DRIVER);
+            // 打开链接
+            conn = DriverManager.getConnection(Database.DB_URL,Database.USER,Database.PASS);
+            // 执行
+            System.out.println("执行更新功能");
+            String sql;
+            sql = "update major set majorId=?,majorName=?,instituteId=? where majorId = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setLong(1,major.getMajorId());
+            stmt.setString(2,major.getMajorName());
+            stmt.setLong(3,major.getInstituteId());
+            stmt.setLong(4,id);
+            stmt.executeUpdate();
+            // 完成后关闭
+            stmt.close();
+            conn.close();
+        }catch(SQLException se){
+            // 处理 JDBC 错误
+            se.printStackTrace();
+        }catch(Exception e){
+            // 处理 Class.forName 错误
+            e.printStackTrace();
+        }finally{
+            // 关闭资源
+            try{
+                if(stmt!=null) stmt.close();
+            }catch(SQLException se2){
+            }
+            try{
+                if(conn!=null) conn.close();
+            }catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+        return "更新详细信息成功";
+    }
 }
