@@ -57,11 +57,11 @@
             <artifactId>spqr</artifactId>
             <version>0.9.9</version>
         </dependency>
-        <!--Graphql依赖-->
+        <!--lombok依赖-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.18</version>
+            <version>1.18.4</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
