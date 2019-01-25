@@ -2,6 +2,9 @@ package com.example.web.course;
 
 
 import io.leangen.graphql.annotations.GraphQLQuery;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Entity;
@@ -9,6 +12,8 @@ import javax.persistence.Entity;
 课程的实体类
  */
 @Entity
+@Getter
+@Setter
 public class Course {
     @Id @GeneratedValue
     @GraphQLQuery(name = "courseId", description = "A course's courseId")
@@ -24,52 +29,6 @@ public class Course {
     @GraphQLQuery(name = "teacherName", description = "A teacher's Name")
     private String teacherName;
 
-    public Long getTeacherId() {
-        return teacherId;
-    }
-
-    public void setTeacherId(Long teacherId) {
-        this.teacherId = teacherId;
-    }
-
-    public String getTeacherName() {
-        return teacherName;
-    }
-
-    public void setTeacherName(String teacherName) {
-        this.teacherName = teacherName;
-    }
-
-    public Long getMajorId() {
-        return majorId;
-    }
-
-    public void setMajorId(Long majorId) {
-        this.majorId = majorId;
-    }
-
-    public String getMajorName() {
-        return majorName;
-    }
-
-    public void setMajorName(String majorName) {
-        this.majorName = majorName;
-    }
-
-    public Long getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(Long courseId) {
-        this.courseId = courseId;
-    }
-
-    public String getCourseName() {
-        return courseName;
-    }
-
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
+    
 
 }

@@ -2,6 +2,9 @@ package com.example.web.Institute;
 
 import com.example.web.major.Major;
 import io.leangen.graphql.annotations.GraphQLQuery;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Entity;
@@ -10,6 +13,8 @@ import java.util.ArrayList;
 学院的实体类
  */
 @Entity
+@Getter
+@Setter
 public class Institute {
     @Id @GeneratedValue
     @GraphQLQuery(name = "instituteId", description = "A Institute's instituteId")
@@ -21,37 +26,6 @@ public class Institute {
     @GraphQLQuery( name = "majorArrayList", description = "A list of major")
     private ArrayList<Major> majorArrayList;
 
-    public ArrayList<Major> getMajorArrayList() {
-        return majorArrayList;
-    }
-
-    public void setMajorArrayList(ArrayList<Major> majorArrayList) {
-        this.majorArrayList = majorArrayList;
-    }
-
-    public Long getInstituteId() {
-        return instituteId;
-    }
-
-    public void setNumberOfMajor(Integer numberOfMajor) {
-        this.numberOfMajor = numberOfMajor;
-    }
-
-    public void setInstituteId(Long instituteId) {
-        this.instituteId = instituteId;
-    }
-
-    public String getInstituteName() {
-        return instituteName;
-    }
-
-    public void setInstituteName(String instituteName) {
-        this.instituteName = instituteName;
-    }
-
-    public Integer getNumberOfMajor() {
-        return numberOfMajor;
-    }
-
+   
 
 }
