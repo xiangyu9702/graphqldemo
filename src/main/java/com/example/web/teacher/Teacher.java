@@ -21,8 +21,8 @@ public class Teacher {
     private String teacherName;
     @GraphQLQuery( name = "teacherSex", description = "A teacher's sex")
     private String teacherSex;
-    @GraphQLQuery(name = "instituteId", description = "A institute's instituteId")
+    @GraphQLQuery(name = "instituteId", description = "A Institute's instituteId")
     private Long instituteId;
-    @GraphQLQuery(name = "instituteName", description = "A institute's instituteName")
+    @GraphQLQuery(name = "instituteName", description = "A Institute's instituteName")
     private String instituteName;
 }

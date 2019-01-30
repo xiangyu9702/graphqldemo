@@ -44,7 +44,7 @@ INSERT INTO `course` VALUES (1,'c',1,2),(2,'现代控制原理',2,2),(3,'模拟�
 UNLOCK TABLES;
 
 --
--- Table structure for table `institute`
+-- Table structure for table `Institute`
 --
 
 DROP TABLE IF EXISTS `institute`;
@@ -59,13 +59,13 @@ CREATE TABLE `institute` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `institute`
+-- Dumping data for table `Institute`
 --
 
 LOCK TABLES `institute` WRITE;
-/*!40000 ALTER TABLE `institute` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Institute` DISABLE KEYS */;
 INSERT INTO `institute` VALUES (1,'信息科学与工程学院',3),(2,'机电工程学院',3),(3,'粉末冶金研究院',3);
-/*!40000 ALTER TABLE `institute` ENABLE KEYS */;
+/*!40000 ALTER TABLE `Institute` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

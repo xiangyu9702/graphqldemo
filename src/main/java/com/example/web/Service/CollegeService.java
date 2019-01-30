@@ -1,7 +1,7 @@
-package com.example.web;
+package com.example.web.Service;
 
-import com.example.web.Institute.institute;
-import com.example.web.Institute.instituteDatabase;
+import com.example.web.Institute.Institute;
+import com.example.web.Institute.InstituteDatabase;
 import com.example.web.course.Course;
 import com.example.web.course.CourseDatabase;
 import com.example.web.major.Major;
@@ -21,10 +21,10 @@ import java.util.*;
 /*
 Graphql的Query和Mutation
  */
-@Service
+
 public class CollegeService {
 
-    private Map<Long, institute> instituteMap = new HashMap<>();
+    private Map<Long, Institute> instituteMap = new HashMap<>();
     private Map<Long, Major> majorMap = new HashMap<>();
     private Map<Long, Course> courseMap = new HashMap<>();
     private Map<Long, Student> studentMap = new HashMap<>();
@@ -32,7 +32,7 @@ public class CollegeService {
 
     public CollegeService() {
         this.majorMap = MajorDatabase.getMajorMap();
-        this.instituteMap = instituteDatabase.getInstituteMap();
+        this.instituteMap = InstituteDatabase.getInstituteMap();
         this.courseMap = CourseDatabase.getCourseMap();
         this.studentMap = StudentDatabase.getStudentMap();
         this.teacherMap = TeacherDatabase.getTeacherMap();
@@ -42,12 +42,12 @@ Queries for institutes
  */
 
     @GraphQLQuery(name = "institutes")//获取学院信息
-    public Collection<institute> getInstitutes() {
-        return instituteDatabase.getInstituteMap().values();
+    public Collection<Institute> getInstitutes() {
+        return InstituteDatabase.getInstituteMap().values();
     }
 
-    @GraphQLQuery(name = "institute")//根据Id获取学院信息
-    public institute getInstituteById(@GraphQLArgument(name = "instituteId") Long id) {
+    @GraphQLQuery(name = "Institute")//根据Id获取学院信息
+    public Institute getInstituteById(@GraphQLArgument(name = "instituteId") Long id) {
         return instituteMap.get(id);
     }
 
@@ -55,12 +55,12 @@ Queries for institutes
     public String saveInstitute(@GraphQLArgument(name = "institutedId") Long institutedId,
                                 @GraphQLArgument(name = "instituteName") String instituteName,
                                 @GraphQLArgument(name = "numberOfMajor") int numberOfMajor) {
-        institute institute = new institute();
+        Institute institute = new Institute();
         institute.setInstituteId(institutedId);
         institute.setInstituteName(instituteName);
         institute.setNumberOfMajor(numberOfMajor);
         instituteMap.put(institutedId, institute);
-        return instituteDatabase.saveInstitute(institute);
+        return InstituteDatabase.saveInstitute(institute);
     }
 
     @GraphQLMutation(name = "updateInstitute")//更新学院信息
@@ -74,13 +74,13 @@ Queries for institutes
         } catch (Exception e) {
             return "更新信息失败，请检查是否存在该id";
         }
-        return instituteDatabase.updateInstitute(instituteID, instituteMap.get(instituteID));
+        return InstituteDatabase.updateInstitute(instituteID, instituteMap.get(instituteID));
     }
 
     @GraphQLMutation(name = "deleteInstitute")//删除学院信息
     public String deleteInstitute(@GraphQLArgument(name = "instituteId") Long id) {
         instituteMap.remove(id);
-        return instituteDatabase.deleteInstitute(id);
+        return InstituteDatabase.deleteInstitute(id);
     }
 
 

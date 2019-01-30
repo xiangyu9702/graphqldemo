@@ -15,13 +15,13 @@ import java.util.ArrayList;
 @Entity
 @Getter
 @Setter
-public class institute {
+public class Institute {
     @Id @GeneratedValue
-    @GraphQLQuery(name = "instituteId", description = "A institute's instituteId")
+    @GraphQLQuery(name = "instituteId", description = "A Institute's instituteId")
     private Long instituteId;
-    @GraphQLQuery(name = "instituteName", description = "A institute's instituteName")
+    @GraphQLQuery(name = "instituteName", description = "A Institute's instituteName")
     private String instituteName;
-    @GraphQLQuery( name = "numberOfMajor", description = "A institute's number of major")
+    @GraphQLQuery( name = "numberOfMajor", description = "A Institute's number of major")
     private Integer numberOfMajor;
     @GraphQLQuery( name = "majorArrayList", description = "A list of major")
     private ArrayList<Major> majorArrayList;

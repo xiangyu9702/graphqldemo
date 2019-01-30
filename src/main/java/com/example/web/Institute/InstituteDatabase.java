@@ -15,13 +15,13 @@ deleteInstitute：从数据库删除学院信息
 saveInstitute：保存新的学院信息
 updateInstitute:更新学院信息
  */
-public class instituteDatabase {
+public class InstituteDatabase {
 
-    private instituteDatabase() {
+    private InstituteDatabase() {
     }
 
-    public static Map<Long, institute> getInstituteMap() {
-        Map<Long, institute> instituteMap=new HashMap<>();
+    public static Map<Long, Institute> getInstituteMap() {
+        Map<Long, Institute> instituteMap=new HashMap<>();
         Map<Long,Major> majorMap=new HashMap<>();
         Connection conn = null;
         Statement stmt = null;
@@ -37,7 +37,7 @@ public class instituteDatabase {
                 long instituteId = instituteRs.getLong("instituteId");
                 String instituteName = instituteRs.getString("instituteName");
                 int numberOfMajor = instituteRs.getInt("numberOfMajor");
-                institute i = new institute();
+                Institute i = new Institute();
                 i.setInstituteName(instituteName);
                 i.setInstituteId((instituteId));
                 i.setNumberOfMajor(numberOfMajor);
@@ -80,8 +80,8 @@ public class instituteDatabase {
         return instituteMap;
     }
 
-    public static String saveInstitute(institute Institute) {
-        Map<Long, institute> userMap=new HashMap<>();
+    public static String saveInstitute(Institute institute) {
+        Map<Long, Institute> userMap=new HashMap<>();
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -90,9 +90,9 @@ public class instituteDatabase {
             String sql;
             sql = "insert into institute values (?,?,?)";
             stmt = conn.prepareStatement(sql);
-            stmt.setLong(1, Institute.getInstituteId());
-            stmt.setString(2, Institute.getInstituteName());
-            stmt.setInt(3, Institute.getNumberOfMajor());
+            stmt.setLong(1, institute.getInstituteId());
+            stmt.setString(2, institute.getInstituteName());
+            stmt.setInt(3, institute.getNumberOfMajor());
             try {
                 stmt.executeUpdate();
             }
@@ -127,7 +127,7 @@ public class instituteDatabase {
         return "保持成功";
     }
     public static String deleteInstitute(Long id) {
-        Map<Long, institute> userMap=new HashMap<>();
+        Map<Long, Institute> userMap=new HashMap<>();
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -166,7 +166,7 @@ public class instituteDatabase {
         return "删除成功";
     }
 
-    public static String updateInstitute( Long id, institute institute) {
+    public static String updateInstitute( Long id, Institute institute) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try{
@@ -210,7 +210,7 @@ public class instituteDatabase {
         return "更新详细信息成功";
     }
 
-    public static instituteDatabase createInstituteDatabase() {
-        return new instituteDatabase();
+    public static InstituteDatabase createInstituteDatabase() {
+        return new InstituteDatabase();
     }
 }
