@@ -1,7 +1,7 @@
 package com.example.web;
 
-import com.example.web.Institute.Institute;
-import com.example.web.Institute.InstituteDatabase;
+import com.example.web.Institute.institute;
+import com.example.web.Institute.instituteDatabase;
 import com.example.web.course.Course;
 import com.example.web.course.CourseDatabase;
 import com.example.web.major.Major;
@@ -24,7 +24,7 @@ Graphql的Query和Mutation
 @Service
 public class CollegeService {
 
-    private Map<Long, Institute> instituteMap = new HashMap<>();
+    private Map<Long, institute> instituteMap = new HashMap<>();
     private Map<Long, Major> majorMap = new HashMap<>();
     private Map<Long, Course> courseMap = new HashMap<>();
     private Map<Long, Student> studentMap = new HashMap<>();
@@ -32,7 +32,7 @@ public class CollegeService {
 
     public CollegeService() {
         this.majorMap = MajorDatabase.getMajorMap();
-        this.instituteMap = InstituteDatabase.getInstituteMap();
+        this.instituteMap = instituteDatabase.getInstituteMap();
         this.courseMap = CourseDatabase.getCourseMap();
         this.studentMap = StudentDatabase.getStudentMap();
         this.teacherMap = TeacherDatabase.getTeacherMap();
@@ -42,12 +42,12 @@ Queries for institutes
  */
 
     @GraphQLQuery(name = "institutes")//获取学院信息
-    public Collection<Institute> getInstitutes() {
-        return InstituteDatabase.getInstituteMap().values();
+    public Collection<institute> getInstitutes() {
+        return instituteDatabase.getInstituteMap().values();
     }
 
-    @GraphQLQuery(name = "Institute")//根据Id获取学院信息
-    public Institute getInstituteById(@GraphQLArgument(name = "instituteId") Long id) {
+    @GraphQLQuery(name = "institute")//根据Id获取学院信息
+    public institute getInstituteById(@GraphQLArgument(name = "instituteId") Long id) {
         return instituteMap.get(id);
     }
 
@@ -55,12 +55,12 @@ Queries for institutes
     public String saveInstitute(@GraphQLArgument(name = "institutedId") Long institutedId,
                                 @GraphQLArgument(name = "instituteName") String instituteName,
                                 @GraphQLArgument(name = "numberOfMajor") int numberOfMajor) {
-        Institute institute = new Institute();
+        institute institute = new institute();
         institute.setInstituteId(institutedId);
         institute.setInstituteName(instituteName);
         institute.setNumberOfMajor(numberOfMajor);
         instituteMap.put(institutedId, institute);
-        return InstituteDatabase.saveInstitute(institute);
+        return instituteDatabase.saveInstitute(institute);
     }
 
     @GraphQLMutation(name = "updateInstitute")//更新学院信息
@@ -71,16 +71,16 @@ Queries for institutes
         try {
         instituteMap.get(instituteID).setInstituteName(instituteName);
         instituteMap.get(instituteID).setNumberOfMajor(numberOfMajor);
-        } catch (Exception E) {
+        } catch (Exception e) {
             return "更新信息失败，请检查是否存在该id";
         }
-        return InstituteDatabase.updateInstitute(instituteID, instituteMap.get(instituteID));
+        return instituteDatabase.updateInstitute(instituteID, instituteMap.get(instituteID));
     }
 
     @GraphQLMutation(name = "deleteInstitute")//删除学院信息
     public String deleteInstitute(@GraphQLArgument(name = "instituteId") Long id) {
         instituteMap.remove(id);
-        return InstituteDatabase.deleteInstitute(id);
+        return instituteDatabase.deleteInstitute(id);
     }
 
 
@@ -120,7 +120,7 @@ Queries for majors.
         majorMap.get(majorID).setMajorName(majorName);
         majorMap.get(majorID).setInstituteId(instituteId);
         majorMap.get(majorID).setInstituteName(instituteMap.get(instituteId).getInstituteName());
-        } catch (Exception E) {
+        } catch (Exception e) {
             return "更新信息失败，请检查是否存在该id";
         }
         return MajorDatabase.updateMajor(majorID, majorMap.get(majorID));
@@ -171,7 +171,7 @@ Queries for majors.
             studentMap.get(studentID).setStudentId(studentID);
             studentMap.get(studentID).setStudentSex(studentSex);
             studentMap.get(studentID).setMajorName(majorMap.get(majorId).getMajorName());
-        } catch (Exception E) {
+        } catch (Exception e) {
             return "更新信息失败，请检查是否存在该id";
         }
         return StudentDatabase.updateStudent(studentID, studentMap.get(studentID));
@@ -224,7 +224,7 @@ Queries for majors.
         courseMap.get(courseID).setMajorId(majorId);
         courseMap.get(courseID).setTeacherId(teacherId);
         courseMap.get(courseID).setMajorName(majorMap.get(majorId).getMajorName());
-        } catch (Exception E) {
+        } catch (Exception e) {
             return "更新信息失败，请检查是否存在该id";
         }
         return CourseDatabase.updateCourse(courseID, courseMap.get(courseID));
@@ -261,7 +261,7 @@ Queries for majors.
         teacherMap.get(teacherId).setTeacherSex(teacherSex);
         teacherMap.get(teacherId).setInstituteId(instituteId);
         teacherMap.get(teacherId).setInstituteName(instituteMap.get(instituteId).getInstituteName());
-        } catch (Exception E) {
+        } catch (Exception e) {
             return "更新信息失败，请检查是否存在该id";
         }
         return TeacherDatabase.updateTeacher(teacherId, teacherMap.get(teacherId));

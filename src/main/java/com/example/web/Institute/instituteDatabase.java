@@ -1,7 +1,6 @@
 package com.example.web.Institute;
 
 import com.example.web.Database;
-import com.example.web.course.Course;
 import com.example.web.major.Major;
 import com.example.web.major.MajorDatabase;
 
@@ -16,16 +15,17 @@ deleteInstitute：从数据库删除学院信息
 saveInstitute：保存新的学院信息
 updateInstitute:更新学院信息
  */
-public class InstituteDatabase {
-    public static Map<Long,Institute> getInstituteMap() {
-        Map<Long,Institute> instituteMap=new HashMap<>();
+public class instituteDatabase {
+
+    private instituteDatabase() {
+    }
+
+    public static Map<Long, institute> getInstituteMap() {
+        Map<Long, institute> instituteMap=new HashMap<>();
         Map<Long,Major> majorMap=new HashMap<>();
         Connection conn = null;
         Statement stmt = null;
         try {
-            // 注册 JDBC 驱动
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            // 打开链接
             conn = DriverManager.getConnection(Database.DB_URL, Database.USER, Database.PASS);
             // 执行查询
             stmt = conn.createStatement();
@@ -37,7 +37,7 @@ public class InstituteDatabase {
                 long instituteId = instituteRs.getLong("instituteId");
                 String instituteName = instituteRs.getString("instituteName");
                 int numberOfMajor = instituteRs.getInt("numberOfMajor");
-                Institute i = new Institute();
+                institute i = new institute();
                 i.setInstituteName(instituteName);
                 i.setInstituteId((instituteId));
                 i.setNumberOfMajor(numberOfMajor);
@@ -64,11 +64,15 @@ public class InstituteDatabase {
         } finally {
             // 关闭资源
             try {
-                if (stmt != null) stmt.close();
+                if (stmt != null) {
+                    stmt.close();
+                }
             } catch (SQLException se2) {
             }
             try {
-                if (conn != null) conn.close();
+                if (conn != null) {
+                    conn.close();
+                }
             } catch (SQLException se) {
                 se.printStackTrace();
             }
@@ -76,14 +80,11 @@ public class InstituteDatabase {
         return instituteMap;
     }
 
-    public static String saveInstitute(Institute Institute) {
-        Map<Long, Institute> userMap=new HashMap<>();
+    public static String saveInstitute(institute Institute) {
+        Map<Long, institute> userMap=new HashMap<>();
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
-            // 注册 JDBC 驱动
-            Class.forName("com.mysql.jdbc.Driver");
-            // 打开链接
             conn = DriverManager.getConnection(Database.DB_URL, Database.USER, Database.PASS);
             // 执行查询
             String sql;
@@ -110,11 +111,15 @@ public class InstituteDatabase {
         } finally {
             // 关闭资源
             try {
-                if (stmt != null) stmt.close();
+                if (stmt != null) {
+                    stmt.close();
+                }
             } catch (SQLException se2) {
             }// 什么都不做
             try {
-                if (conn != null) conn.close();
+                if (conn != null) {
+                    conn.close();
+                }
             } catch (SQLException se) {
                 se.printStackTrace();
             }
@@ -122,13 +127,10 @@ public class InstituteDatabase {
         return "保持成功";
     }
     public static String deleteInstitute(Long id) {
-        Map<Long,Institute> userMap=new HashMap<>();
+        Map<Long, institute> userMap=new HashMap<>();
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
-            // 注册 JDBC 驱动
-            Class.forName("com.mysql.jdbc.Driver");
-            // 打开链接
             conn = DriverManager.getConnection(Database.DB_URL, Database.USER, Database.PASS);
             // 执行查询
             String sql;
@@ -148,11 +150,15 @@ public class InstituteDatabase {
         } finally {
             // 关闭资源
             try {
-                if (stmt != null) stmt.close();
+                if (stmt != null) {
+                    stmt.close();
+                }
             } catch (SQLException se2) {
             }// 什么都不做
             try {
-                if (conn != null) conn.close();
+                if (conn != null) {
+                    conn.close();
+                }
             } catch (SQLException se) {
                 se.printStackTrace();
             }
@@ -160,13 +166,10 @@ public class InstituteDatabase {
         return "删除成功";
     }
 
-    public static String updateInstitute( Long id, Institute institute) {
+    public static String updateInstitute( Long id, institute institute) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try{
-            // 注册 JDBC 驱动
-            Class.forName(Database.JDBC_DRIVER);
-            // 打开链接
             conn = DriverManager.getConnection(Database.DB_URL,Database.USER,Database.PASS);
             // 执行
             System.out.println("执行更新功能");
@@ -191,15 +194,23 @@ public class InstituteDatabase {
         }finally{
             // 关闭资源
             try{
-                if(stmt!=null) stmt.close();
+                if(stmt!=null) {
+                    stmt.close();
+                }
             }catch(SQLException se2){
             }
             try{
-                if(conn!=null) conn.close();
+                if(conn!=null) {
+                    conn.close();
+                }
             }catch(SQLException se){
                 se.printStackTrace();
             }
         }
         return "更新详细信息成功";
+    }
+
+    public static instituteDatabase createInstituteDatabase() {
+        return new instituteDatabase();
     }
 }

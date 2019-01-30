@@ -18,9 +18,6 @@ public class StudentDatabase {
         Connection conn = null;
         Statement stmt = null;
         try {
-            // 注册 JDBC 驱动
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            // 打开链接
             conn = DriverManager.getConnection(Database.DB_URL, Database.USER, Database.PASS);
             // 执行查询
             stmt = conn.createStatement();
@@ -53,11 +50,15 @@ public class StudentDatabase {
         } finally {
             // 关闭资源
             try {
-                if (stmt != null) stmt.close();
+                if (stmt != null) {
+                  stmt.close();
+                }
             } catch (SQLException se2) {
             }
             try {
-                if (conn != null) conn.close();
+                if (conn != null) {
+                  conn.close();
+                }
             } catch (SQLException se) {
                 se.printStackTrace();
             }
@@ -71,9 +72,6 @@ public class StudentDatabase {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
-            // 注册 JDBC 驱动
-            Class.forName("com.mysql.jdbc.Driver");
-            // 打开链接
             conn = DriverManager.getConnection(Database.DB_URL, Database.USER, Database.PASS);
             // 执行查询
             String sql;
@@ -93,11 +91,15 @@ public class StudentDatabase {
         } finally {
             // 关闭资源
             try {
-                if (stmt != null) stmt.close();
+                if (stmt != null) {
+                  stmt.close();
+                }
             } catch (SQLException se2) {
             }// 什么都不做
             try {
-                if (conn != null) conn.close();
+                if (conn != null) {
+                  conn.close();
+                }
             } catch (SQLException se) {
                 se.printStackTrace();
             }
@@ -109,9 +111,6 @@ public class StudentDatabase {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
-            // 注册 JDBC 驱动
-            Class.forName("com.mysql.jdbc.Driver");
-            // 打开链接
             conn = DriverManager.getConnection(Database.DB_URL, Database.USER, Database.PASS);
             // 执行查询
             String sql;
@@ -139,11 +138,15 @@ public class StudentDatabase {
         } finally {
             // 关闭资源
             try {
-                if (stmt != null) stmt.close();
+                if (stmt != null) {
+                  stmt.close();
+                }
             } catch (SQLException se2) {
             }// 什么都不做
             try {
-                if (conn != null) conn.close();
+                if (conn != null) {
+                  conn.close();
+                }
             } catch (SQLException se) {
                 se.printStackTrace();
             }
@@ -154,9 +157,6 @@ public class StudentDatabase {
         Connection conn = null;
         PreparedStatement stmt = null;
         try{
-            // 注册 JDBC 驱动
-            Class.forName(Database.JDBC_DRIVER);
-            // 打开链接
             conn = DriverManager.getConnection(Database.DB_URL,Database.USER,Database.PASS);
             // 执行
             System.out.println("执行更新功能");
@@ -182,11 +182,15 @@ public class StudentDatabase {
         }finally{
             // 关闭资源
             try{
-                if(stmt!=null) stmt.close();
+                if(stmt!=null) {
+                  stmt.close();
+                }
             }catch(SQLException se2){
             }
             try{
-                if(conn!=null) conn.close();
+                if(conn!=null) {
+                  conn.close();
+                }
             }catch(SQLException se){
                 se.printStackTrace();
             }
